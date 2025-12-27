@@ -7,7 +7,7 @@ import Home from './components/Home'
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={ <Home/> }/>
+      <Route path="/*" element={ <Home/> }/>
 
     </Routes>
   </BrowserRouter>
