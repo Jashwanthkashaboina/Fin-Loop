@@ -146,37 +146,46 @@ async function main() {
 // });
 
 //=== In the same way Insert temp data of positions into DataBase ===//
-app.get("/addpositions", async(req, res) =>{
-    try{
-        const dummyData = [
-            {
-                product: "CNC",
-                name: "EVEREADY",
-                qty: 2,
-                avg: 316.27,
-                price: 312.35,
-                net: "+0.58%",
-                day: "-1.24%",
-                isLoss: true,
-            },
-            {
-                product: "CNC",
-                name: "JUBLFOOD",
-                qty: 1,
-                avg: 3124.75,
-                price: 3082.65,
-                net: "+10.04%",
-                day: "-1.35%",
-                isLoss: true,
-            },
-        ];
-        await positionsModel.insertMany(dummyData);
-        res.send("Positions added Successfully!");
-    } catch(err){
-        res.send(err);
-    }
+// app.get("/addpositions", async(req, res) =>{
+//     try{
+//         const dummyData = [
+//             {
+//                 product: "CNC",
+//                 name: "EVEREADY",
+//                 qty: 2,
+//                 avg: 316.27,
+//                 price: 312.35,
+//                 net: "+0.58%",
+//                 day: "-1.24%",
+//                 isLoss: true,
+//             },
+//             {
+//                 product: "CNC",
+//                 name: "JUBLFOOD",
+//                 qty: 1,
+//                 avg: 3124.75,
+//                 price: 3082.65,
+//                 net: "+10.04%",
+//                 day: "-1.35%",
+//                 isLoss: true,
+//             },
+//         ];
+//         await positionsModel.insertMany(dummyData);
+//         res.send("Positions added Successfully!");
+//     } catch(err){
+//         res.send(err);
+//     }
+// });
+
+app.get("/allholdings", async(req, res) =>{
+    let allholdings = await HoldingsModel.find({});
+    res.send(allholdings);
 });
 
+app.get("/allpositions", async(req, res) =>{
+    let allpositions = await positionsModel.find({});
+    res.send(allpositions);
+});
 
 app.listen(PORT, () =>{
     console.log("Sever is listening to the port 8080");
