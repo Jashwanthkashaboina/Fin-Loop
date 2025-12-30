@@ -1,26 +1,14 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# Node modules folder (contains dependencies)
 node_modules/
-dist
-dist-ssr
-*.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-# Ignore public images
-public/
+# Environment variables file (contains sensitive info like API keys)
+.env
+
+# Log files
+*.log
+
+# Build and distribution folders (if you have any build process)
+dist/
+build/
+
+
