@@ -1,9 +1,22 @@
-import { positions } from "../data/data.jsx";
+// Same as Holdings -- for detail info refer Holdings.jsx
+// import { positions } from "../data/data.jsx";
+import axios from "axios";
+import { useState,useEffect } from "react";
 
 function Positions() {
+    // Now, fetch the data
+    const [allPositions, setallPositions] = useState([]);
+    // axios is the package will help use to connect to the package
+    useEffect(() =>{
+        axios.get("http://localhost:8000/allpositions")
+            .then((res) =>{
+                console.log("Working !");
+                setallPositions(res.data);
+            })
+    }, []);
     return ( 
         <>
-            <h3 className="title">Positions ({ positions.length })</h3>
+            <h3 className="title">Positions ({ allPositions.length })</h3>
 
             <div className="order-table">
                 <table>
@@ -18,7 +31,7 @@ function Positions() {
                     </tr>
 
                     {
-                    positions.map((stock, index) =>{
+                    allPositions.map((stock, index) =>{
                         const currValue = stock.price * stock.qty;
                         const isProfit = (currValue - stock.avg * stock.qty) >= 0.0;
                         const profClass = isProfit ? "profit" : "loss";
@@ -31,7 +44,7 @@ function Positions() {
                                 <td> { stock.qty } </td>
                                 <td> { stock.avg.toFixed(2) } </td>
                                 <td> { stock.price.toFixed(2) } </td>
-                                <td className='profClass'> 
+                                <td className={ profClass }> 
                                     { (currValue - stock.avg * stock.qty).toFixed(2) } 
                                 </td>
                                 <td className={ dayClass }> { stock.day }</td>

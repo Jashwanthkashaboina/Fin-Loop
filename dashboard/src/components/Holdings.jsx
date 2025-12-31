@@ -16,7 +16,7 @@ function Holdings() {
     useEffect(() =>{
         axios.get("http://localhost:8000/allholdings")
             .then((res) =>{
-                console.log("Working !")
+                console.log("Working !");
                 setallHoldings(res.data);
             })
     }, []);
