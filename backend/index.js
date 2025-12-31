@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const  HoldingsModel  = require('./models/holdings');
 const positionsModel = require('./models/positions');
+const ordersModel = require('./models/orders');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -191,6 +192,22 @@ app.get("/allpositions", async(req, res) =>{
     let allpositions = await positionsModel.find({});
     res.send(allpositions);
 });
+
+// to buy stocks
+app.post("/neworder", async(req, res) =>{
+    // 1. read data
+    let { name, qty, price, mode } = req.body;
+    // 2. create order
+    let newOrder = new ordersModel({
+        name,
+        qty,
+        price,
+        mode,
+    });
+    //3. store to database
+    await newOrder.save();
+    res.send("order saved!");
+})
 
 app.listen(PORT, () =>{
     console.log("Sever is listening to the port 8080");
