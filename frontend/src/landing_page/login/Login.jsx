@@ -3,9 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function SignUp() {
+function Login() {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -13,33 +12,27 @@ function SignUp() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:8000/signup", {
+      const res = await axios.post("http://localhost:8000/login", {
         username,
-        email,
         password,
       });
 
       toast.success(res.data.message);
-      navigate("/"); // change later to 
+      navigate("/"); // change later to /dashboard
     } catch (err) {
-      toast.error(err.response?.data?.message || "Signup failed");
+      toast.error("Invalid username or password");
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Sign Up</h2>
+      <h2>Login</h2>
 
       <input
+        type="text"
         placeholder="username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-      />
-
-      <input
-        placeholder="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
@@ -49,9 +42,9 @@ function SignUp() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button type="submit">Sign Up</button>
+      <button type="submit">Login</button>
     </form>
   );
 }
 
-export default SignUp;
+export default Login;
