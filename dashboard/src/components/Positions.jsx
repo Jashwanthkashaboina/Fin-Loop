@@ -8,7 +8,7 @@ function Positions() {
     const [allPositions, setallPositions] = useState([]);
     // axios is the package will help use to connect to the package
     useEffect(() =>{
-        axios.get("http://localhost:8000/allpositions")
+        axios.get("http://localhost:8000/positions")
             .then((res) =>{
                 console.log("Working !");
                 setallPositions(res.data);

@@ -5,6 +5,7 @@
 
 import axios from 'axios';
 import { useState, useEffect } from "react";
+import { VerticalGraph } from './VerticalGraph';
 // Here useState is to --- store the data
 // And useEffect is to --- connect to the api
 
@@ -14,12 +15,26 @@ function Holdings() {
     const [allHoldings, setallHoldings] = useState([]);
     // axios is the package will help use to connect to the package
     useEffect(() =>{
-        axios.get("http://localhost:8000/allholdings")
+        axios.get("http://localhost:8000/holdings")
             .then((res) =>{
                 console.log("Working !");
                 setallHoldings(res.data);
             })
     }, []);
+
+
+const labels = allHoldings.map((stock) => stock.name);
+const data = {
+    labels,
+    datasets: [
+        {
+        label: 'Holdings',
+        data: allHoldings.map((stock) => stock.qty),
+        backgroundColor: 'rgba(75, 192, 192, 0.5)', // Bar color
+        },
+    ],
+};
+    
     return ( 
         <>
             <h3 className="title">Holdings ({ allHoldings.length })</h3>
@@ -73,6 +88,7 @@ function Holdings() {
                 <p>P&L</p>
                 </div>
             </div>
+            <VerticalGraph data={data}/>
         </>
      );
 }
