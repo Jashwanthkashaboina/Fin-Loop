@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 # Ignore public images
 public/media/images/
+
+# Ignore tests directory
+tests/
