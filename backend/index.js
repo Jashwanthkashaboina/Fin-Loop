@@ -39,7 +39,10 @@ const sessionOptions = {
 
 
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:5174"],
+  origin: [ "http://localhost:5173", 
+            "http://localhost:5174", 
+            "https://finloop18.netlify.app",
+            "https://zerodha-dashboard5.netlify.app"],
   credentials: true,
 }));
 
