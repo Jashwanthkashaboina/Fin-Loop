@@ -12,21 +12,37 @@ code {
     monospace;
 }
 
-.dashboard-container {
+/* .dashboard-container {
   width: 100%;
   height: 90vh;
   display: flex;
   align-items: center;
   box-sizing: border-box;
+} */
+ .dashboard-container {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  align-items: stretch;
 }
 
-.content {
+
+/* .content {
   flex-basis: 68%;
   height: 100%;
   box-sizing: border-box;
   overflow-y: auto;
   padding: 3% 2%;
+} */
+
+.content {
+  flex: 1;          /* TAKE REMAINING SPACE */
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 3% 2%;
 }
+
 
 .funds {
   width: 100%;
@@ -155,9 +171,30 @@ code {
 }
 
 .order-table table {
-  width: 100%;
-  border-collapse: collapse;
+  table-layout: fixed;
 }
+
+/* Control column widths to remove huge gap */
+/* .order-table th:nth-child(1),
+.order-table td:nth-child(1) {
+  width: 40%;
+}
+
+.order-table th:nth-child(2),
+.order-table td:nth-child(2) {
+  width: 45%;
+}
+
+.order-table th:nth-child(3),
+.order-table td:nth-child(3) {
+  width: 45%;
+}
+
+.order-table th:nth-child(4),
+.order-table td:nth-child(4) {
+  width: 45%;
+} */
+
 
 .order-table tr {
   border-top: 1px solid #f1f1f1;
@@ -632,14 +669,22 @@ hr {
   cursor: pointer;
 }
 
-.watchlist-container {
+/* .watchlist-container {
   flex-basis: 32%;
   height: 100%;
   box-sizing: border-box;
   box-shadow: 0px 0px 4px 1px rgb(236, 235, 235);
   overflow-y: auto;
   position: relative;
+} */
+.watchlist-container {
+  width: 320px;
+  min-width: 320px;
+  height: 100%;
+  box-shadow: 0px 0px 4px 1px rgb(236, 235, 235);
+  overflow-y: auto;
 }
+
 
 .search-container {
   display: flex;
