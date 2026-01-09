@@ -15,6 +15,14 @@ export const GeneralContextProvider = (props) => {
 
   const [selectedStockUID, setSelectedStockUID] = useState("");
 
+  // The below state is used to trigger data without refleshing the page
+  const [dataChanged, setDataChanged] = useState(false);
+
+  const notifyDataChange = () => {
+    setDataChanged((prev) => !prev);
+  };
+
+
 
   const handleOpenBuyWindow = (uid) => {
     setIsBuyWindowOpen(true);
@@ -41,6 +49,8 @@ export const GeneralContextProvider = (props) => {
         closeBuyWindow: handleCloseBuyWindow,
         openSellWindow: handleOpenSellWindow,
         closeSellWindow: handleCloseSellWindow,
+        dataChanged,
+        notifyDataChange
       }}
     >
       {/* props.children = Render whatever components are wrapped inside GeneralContextProvider.” */}

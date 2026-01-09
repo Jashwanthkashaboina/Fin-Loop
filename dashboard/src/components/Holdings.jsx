@@ -4,23 +4,26 @@
 // backend "/allholdings". For that we use react "hooks" and useState all these !
 
 import axios from 'axios';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { VerticalGraph } from './VerticalGraph';
+import GeneralContext from './GeneralContext';
 // Here useState is to --- store the data
 // And useEffect is to --- connect to the api
 
 
+
 function Holdings() {
+    const { dataChanged } = useContext(GeneralContext);
     // Now, fetch the data
     const [allHoldings, setallHoldings] = useState([]);
     // axios is the package will help use to connect to the package
     useEffect(() =>{
         axios.get("http://localhost:8000/holdings")
             .then((res) =>{
-                console.log("Working !");
+                // console.log("Working !");
                 setallHoldings(res.data);
             })
-    }, []);
+    }, [dataChanged]); // whenever dataChanged changes, this useEffect will re-run
 
 
 const labels = allHoldings.map((stock) => stock.name);
@@ -50,24 +53,26 @@ const data = {
                     <th>Net chg.</th>
                     <th>Day chg.</th>
                 </tr>
-                { allHoldings.map((stock, index) =>{
-                    const currValue = stock.price * stock.qty;
-                    const isProfit = (currValue - stock.avg * stock.qty) >= 0.0;
-                    const profClass = isProfit ? "profit" : "loss";
-                    const dayClass = stock.isLoss ? "loss" : "profit";  
-                    
+                {allHoldings.map((stock, index) => {
+                    // ?? means “use this value unless it is null or undefined”
+                    const avgPrice = stock.avgPrice ?? stock.avg ?? 0;
+                    const ltp = avgPrice * (1 + (Math.random() - 0.5) / 10);
+                    const currValue = ltp * stock.qty;
+                    const pnl = currValue - avgPrice * stock.qty;
+                    const netChg = ((ltp - avgPrice) / avgPrice) * 100;
+                    const dayChg = netChg * 0.4;
+                    const profClass = pnl >= 0 ? "profit" : "loss";
+
                     return (
                         <tr key={index}>
-                            <td> { stock.name } </td>
-                            <td> { stock.qty } </td>
-                            <td> { stock.avg.toFixed(2) } </td>
-                            <td> { stock.price.toFixed(2) } </td>
-                            <td> { currValue.toFixed(2) } </td>
-                            <td className={ profClass }> 
-                                { (currValue - stock.avg * stock.qty).toFixed(2) } 
-                            </td>
-                            <td className={ profClass }> { stock.net } </td>
-                            <td className={ dayClass }> { stock.day }</td>
+                        <td>{stock.name}</td>
+                        <td>{stock.qty}</td>
+                        <td>{avgPrice.toFixed(2)}</td>
+                        <td>{ltp.toFixed(2)}</td>
+                        <td>{currValue.toFixed(2)}</td>
+                        <td className={profClass}>{pnl.toFixed(2)}</td>
+                        <td className={profClass}>{netChg.toFixed(2)}%</td>
+                        <td className={profClass}>{dayChg.toFixed(2)}%</td>
                         </tr>
                     );
                 })}
