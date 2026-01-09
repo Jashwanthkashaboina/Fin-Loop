@@ -94,20 +94,103 @@ app.get("/positions", async(req, res) =>{
 });
 
 // to buy stocks
-app.post("/orders", async(req, res) =>{
-    // 1. read data
-    let { name, qty, price, mode } = req.body;
-    // 2. create order
-    let newOrder = new ordersModel({
-        name,
-        qty,
-        price,
-        mode,
+// app.post("/orders", async(req, res) =>{
+//     // 1. read data
+//     let { name, qty, price, mode } = req.body;
+//     // 2. create order
+//     let newOrder = new ordersModel({
+//         name,
+//         qty,
+//         price,
+//         mode,
+//     });
+//     //3. store to database
+//     await newOrder.save();
+//     res.send("order saved!");
+// })
+
+
+app.get("/orders", async (req, res) => {
+  const allOrders = await ordersModel.find({}).sort({ createdAt: -1 });
+  res.json(allOrders);
+});
+
+app.post("/orders", async (req, res) => {
+  try {
+    const { name, qty, price, mode } = req.body;
+
+    // 1. Save order
+    const newOrder = new ordersModel({
+      name,
+      qty,
+      price,
+      mode,
     });
-    //3. store to database
     await newOrder.save();
-    res.send("order saved!");
-})
+
+    // BUY logic 
+    if (mode === "BUY") {
+      const existingHolding = await HoldingsModel.findOne({ name });
+
+      if (!existingHolding) {
+        // stock not in holdings
+        const newHolding = new HoldingsModel({
+          name,
+          qty,
+          avgPrice: price,
+        });
+        await newHolding.save();
+      } else {
+            const oldQty = existingHolding.qty;
+            const oldAvg = existingHolding.avgPrice || 0;
+
+            const totalQty = oldQty + qty;
+
+            const newAvgPrice =
+                (oldQty * oldAvg + qty * price) / totalQty;
+
+            existingHolding.qty = totalQty;
+            existingHolding.avgPrice = newAvgPrice;
+
+            await existingHolding.save();
+        } 
+    }
+    else if (mode === "SELL") {
+        const existingHolding = await HoldingsModel.findOne({ name });
+
+        // Stock not in holdings
+        if (!existingHolding) {
+            return res.status(400).json({
+            error: "Cannot sell stock that is not in holdings",
+            });
+        }
+
+        //  Selling more than owned
+        if (qty > existingHolding.qty) {
+            return res.status(400).json({
+            error: "Not enough quantity to sell",
+            });
+        }
+
+        // Valid sell
+        const remainingQty = existingHolding.qty - qty;
+
+        if (remainingQty === 0) {
+            // Remove holding completely
+            await HoldingsModel.deleteOne({ name });
+        } else {
+            // Update remaining quantity
+            existingHolding.qty = remainingQty;
+            await existingHolding.save();
+        }
+    }
+    res.status(201).json({ message: "Order placed successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 
 app.listen(PORT, () =>{
     console.log("Sever is listening to the port 8000");
