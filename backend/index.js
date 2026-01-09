@@ -33,18 +33,15 @@ const sessionOptions = {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "lax",
         secure: true,
     },
 };
 
 
 app.use(cors({
-  origin: [
-             "https://finloop18.netlify.app",
-            "https://zerodha-dashboard5.netlify.app"
-        ],
-  credentials: true,
+  origin: true,
+  credentials: true
 }));
 
 
@@ -207,6 +204,17 @@ app.post("/orders", isLoggedIn, async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Something went wrong" });
   }
+});
+
+
+// React routing for dashboard
+app.get("/dashboard/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dashboard/dist/index.html"));
+});
+
+// React routing for landing app
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
 
