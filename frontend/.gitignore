@@ -23,7 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 # Ignore public images
-public/media/images/
+# public/media/images/
 
 # Ignore tests directory
 tests/
