@@ -25,6 +25,6 @@ A full-stack trading platform clone built for learning and portfolio purposes.
 - MongoDB
 - Passport.js (session-based auth)
 
-  ## ⚠️ Deployment Status
+  ##  Deployment Status
 - Frontend deployed as a static site
-- Backend implementation completed locally but not deployed due to session/cookie hosting constraints
+
